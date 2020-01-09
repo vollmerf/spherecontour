@@ -16,7 +16,7 @@ Please see the LICENSE and CITATION files for license restrictions and citation
 information.
 
 ## Related Software
-The standalone program 'Orient' by this author is free software that includes 
+The program 'Orient' by this author is free software that includes 
 this functionality, and numerous additional options. It runs on Macintosh, 
 Windows, and Linux platforms, and can be downloaded for free from: 
 
