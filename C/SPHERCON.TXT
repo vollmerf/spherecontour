@@ -1,0 +1,37 @@
+Sphere Contour 1.0
+Crestline Software
+F.W. Vollmer, 1993
+------------------
+The executable program SPHERCON.EXE is a compiled image of the program 
+Sphere Contour from the appendix of:
+
+  F.W. Vollmer, in press, Automatic contouring of spherical orientation data
+  using a modified Kamb method: Computers & Geosciences.
+
+It was compiled with Turbo C++ 1.0 for MS-DOS. 
+
+This executable program is not released into the public domain, but may be 
+used and distributed freely for noncommercial research and education as 
+long as it is distributed at no charge, and with all files present and 
+unmodified. 
+
+File listing:
+
+  SPHERCON EXE - executible
+  SPHERCON TXT - this file
+  *        BGI - graphics driver files
+  *        DAT - sample data files  
+
+The data sets are referenced in the paper:
+
+  ANG79L   DAT - 38 normal fault striations (Angelier 1979)
+  FLE-B6   DAT - 107 magnetic remanence measurements (Schmidt and Embleton, 
+                 1985, as tabulated in Fisher, Lewis and Embleton, 1987)
+  KAMB59F7 DAT - 112 ice c-axes (Kamb 1959)
+  VLY      DAT - 56 bedding planes from asymmetric folds in Ordovician 
+                 graywackes, Albany Co., New York (Vollmer 1981)
+
+These are all in line (plunge trend, or inclination declination) format
+except VLY.DAT which is in strike format.
+
+FWV 10/22/93
