@@ -2,7 +2,7 @@
 Program for automatic contouring of spherical orientation data using a modified Kamb method to create spherical projections including Schmidt (equal-area) and stereographic (equal-angle) plots. Additional files include data files used in the paper. 
 
 ## Citation
-This repostory containss a C, Pascal, and MATLAB/Octave implementations of the algorithm presented in:
+This repostory containss C, Pascal, and MATLAB/Octave implementations of the algorithm presented in:
 
 __Vollmer, F.W., 1995. C program for automatic contouring of spherical 
 orientation data using a modified Kamb method: Computers & Geosciences, 
