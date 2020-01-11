@@ -15,10 +15,12 @@ works, to produce figures or other content.
 Please see the LICENSE and CITATION files for license restrictions and citation 
 information.
 
+[SphereContour](https://github.com/vollmerf/spherecontour)
+
 ## Related Software
 The program __Orient__ by this author is free software that includes this functionality, and numerous additional options. It runs on Macintosh, 
 Windows, and Linux platforms, and can be downloaded for free from: 
 
-[www.frederickvollmer.com](https://www.frederickvollmer.com/orient/)
+[Orient](https://www.frederickvollmer.com/orient/)
 
 
