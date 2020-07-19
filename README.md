@@ -18,10 +18,11 @@ information.
 [SphereContour](https://github.com/vollmerf/spherecontour)
 
 ## Related Software
-The program __Orient__ by this author is free software that includes this functionality, and numerous additional options. It runs on Macintosh, 
+The program Orient by this author is free software that includes this functionality, and numerous additional options. It runs on Macintosh, 
 Windows, and Linux platforms, and can be downloaded for free from: 
 
 [Orient](https://vollmerf.github.io/orient/)
+
 --- 
 
 [vollmerf home](../)
