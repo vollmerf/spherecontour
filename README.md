@@ -21,6 +21,9 @@ information.
 The program __Orient__ by this author is free software that includes this functionality, and numerous additional options. It runs on Macintosh, 
 Windows, and Linux platforms, and can be downloaded for free from: 
 
-[Orient](https://www.frederickvollmer.com/orient/)
+[Orient](https://vollmerf.github.io/orient/)
+--- 
 
+[vollmerf home](../)
 
+18 July 2020
