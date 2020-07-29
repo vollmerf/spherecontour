@@ -25,6 +25,6 @@ Windows, and Linux platforms, and can be downloaded for free from:
 
 --- 
 
-[vollmerf home](https://vollmerf.github.io/)
+[Home](https://vollmerf.github.io/)
 
 18 July 2020
