@@ -1,4 +1,5 @@
 # SphereContour
+
 Program for automatic contouring of spherical orientation data using a modified Kamb method to create spherical projections including Schmidt (equal-area) and stereographic (equal-angle) plots. Additional files include data files used in the paper. 
 
 ## Citation
@@ -18,13 +19,12 @@ information.
 [SphereContour](https://github.com/vollmerf/spherecontour)
 
 ## Related Software
-The program Orient by this author is free software that includes this functionality, and numerous additional options. It runs on Macintosh, 
+The program [Orient](https://vollmerf.github.io/orient/) by this author is free software that includes this functionality, and numerous additional options. It runs on Macintosh, 
 Windows, and Linux platforms, and can be downloaded for free from: 
-
-[Orient](https://vollmerf.github.io/orient/)
 
 --- 
 
-[Home](https://vollmerf.github.io/)
+[Home](https://github.com/vollmerf/) | [Software](https://github.com/vollmerf/software/) | [Orient](https://github.com/vollmerf/orient/) | [EllipseFit](../ellipsefit/) | [Antevs](https://github.com/vollmerf/antevs/)
 
-18 July 2020
+
+| 29 July 2020 |
