@@ -1,5 +1,5 @@
 # SphereContour
-Program for automatic contouring of spherical orientation data using a modified Kamb method to create spherical projections including Schmidt (equal-area) and stereographic (equal-angle) plots from Vollmer, 1995. Additional files include data files used in the paper. 
+Program for automatic contouring of spherical orientation data using a modified Kamb method to create spherical projections including Schmidt (equal-area) and stereographic (equal-angle) plots from Vollmer (1995). Additional files include data files used in the paper. 
 
 ---
 
@@ -27,4 +27,4 @@ The program [Orient](https://vollmerf.github.io/orient/) by this author is free 
 
 [Home](https://vollmerf.github.io/) | [Software](https://vollmerf.github.io/software/) | [Orient](https://vollmerf.github.io/orient/) | [EllipseFit](https://vollmerf.github.io/ellipsefit/) | [Antevs](https://vollmerf.github.io/antevs/)
 
-| 29 July 2020 |
+| 6 Aug 2020 |
