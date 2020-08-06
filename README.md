@@ -20,8 +20,7 @@ information.
 [SphereContour](https://github.com/vollmerf/spherecontour)
 
 ## Related Software
-The program [Orient](https://vollmerf.github.io/orient/) by this author is free software that includes this functionality, and numerous additional options. It runs on Macintosh, 
-Windows, and Linux platforms, and can be downloaded for free from: 
+The program [Orient](https://vollmerf.github.io/orient/) by this author is free software that includes this functionality, and numerous additional options. It runs on Macintosh, Windows, and Linux platforms. 
 
 --- 
 
