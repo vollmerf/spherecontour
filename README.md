@@ -14,8 +14,9 @@ which should be cited by publications using this code, algorithm, or derivative
 works, to produce figures or other content. 
 
 ## License
-Please see the LICENSE and CITATION files for license restrictions and citation 
-information.
+Please see the [LICENSE](LICENSE.md) and [CITATION](CITATION.md) for license citation information.
+
+## Download
 
 [SphereContour](https://github.com/vollmerf/spherecontour)
 
