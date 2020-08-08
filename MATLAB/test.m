@@ -3,36 +3,62 @@
 % Purpose : test program for spherecontour.m
 % Author  : Frederick W. Vollmer
 % Date    : 24 Sep 2014
-% Update  : 02 Apr 2018 
+% Update  : 08 Apr 2020
+% Notice  : Copyright 2014-2020
+% License : See LICENSE
+%
+% The algorithm used in this software is described in:
+%
+%  __F.W. Vollmer, 1995. C program for automatic contouring of spherical 
+%  orientation data using a modified Kamb method: Computers & Geosciences, 
+%  v. 21, n. 1, p. 31-49.__
+%  
+% which should be cited by publications using this code, algorithm, or 
+% derivative works to produce figures or other content. 
+%-------------------------------------------------------------------------
 
 % get comma delimited test file
 [filename, pathname] = uigetfile( {'*.csv'});
 m = csvread([pathname, filename]);
-if (strcmp(filename, 'Vollmer_1981_m.csv') == 1)
-  opts = 'str,dip,deg'; % strike, dip in degrees
+if isempty(strfind(filename, '_sd'))
+  opts = 'dec,inc,deg,int,mud'; % declination, inclination in degrees
 else
-  opts = 'dec,inc,deg'; % declination, inclination in degrees
+  opts = 'str,dip,deg,int,mud'; % strike, dip in degrees
 end
 
 % create a Schmidt plot (lower hemisphere equal-area projection)
-[points, lines, frame, grid] = spherecontour(m, opts, 10, 50);
+%[points, lines, frame, grid] = spherecontour(m, opts, 5, 50);
+% multiples of uniform density, nlevels (5) not used
+[points,lines,frame,grid] = spherecontour(m,opts,5,50,3,1,1);
 
 % set up figure
 figure;
 hold on;
 axis([-1.0 1.0 -1.0 1.0]);
+axis('equal');
 axis('off');
 
 % define colormap 
 % problem: Matlab/Octave sets blanked (NaN) values to first colormap element
+
 % solution 1 - choose colormap with first element = white:
 %cmap = gray(256);
 %colormap(flipud(cmap));
+
 % solution 2 - replace NaN with negative value and set first colormap element = white:
-cmap = jet(256);
-cmap(1,:) = [1 1 1];
-colormap(cmap);
-grid(isnan(grid)) = -0.1;
+%cmap = jet(256);
+%cmap(1,:) = [1 1 1];
+%colormap(cmap);
+%grid(isnan(grid)) = -0.1;
+
+% solution 3 - choose colormap with first element = white:
+% create a linear color map from white to red
+lc = 256;
+c1 = [1,1,1];
+c2 = [1,0,0];
+clin = [linspace(c1(1),c2(1),lc)', linspace(c1(2),c2(2),lc)', ... 
+        linspace(c1(3),c2(3),lc)'];
+colormap(clin);
 
 % plot grid as color gradient
 imagesc(-1:1, -1:1, grid);
@@ -63,6 +89,6 @@ end
 px = points(:,1); 
 py = points(:,2); 
 h = plot(px, py, 'o');
-set(h(1),'MarkerEdgeColor','k','MarkerFaceColor','w')
+set(h(1),'MarkerEdgeColor','k','MarkerFaceColor','w', 'MarkerSize', 10)
 
 hold off;

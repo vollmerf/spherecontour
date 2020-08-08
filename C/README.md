@@ -1,5 +1,5 @@
 # SphereContour
-Program for automatic contouring of spherical orientation data using a modified Kamb method to create spherical projections including Schmidt (equal-area) and stereographic (equal-angle) plots. Additional files include data files used in the paper. 
+Program for automatic contouring of spherical orientation data using a modified Kamb method to create spherical projections including Schmidt (equal-area) and stereographic (equal-angle) plots. Additional files include data files. 
 
 ## Citation
 This repostory contains a C implementation of the algorithm presented in:
@@ -15,9 +15,11 @@ works, to produce figures or other content.
 Please see the LICENSE and CITATION files for license restrictions and citation 
 information.
 
-## Related Software
-The program 'Orient' by this author is free software that includes 
-this functionality, and numerous additional options. It runs on Macintosh, 
-Windows, and Linux platforms, and can be downloaded for free from: 
+## Notes
+ command line version (SPHERECON) created using Borland C. It has not been updated to run on Object Pascal (Delphi / Free Pascal). 
 
-https://www.frederickvollmer.com/orient/
+## Notes
+This is the C code published in Vollmer 1995. It is a command line version (SPHERECON) created using Borland Turbo C++ and BGI graphics. The algorithms. It has not been updated to run in modern Object Pascal (Delphi / Free Pascal), and has been superseded by [__Orient__](https://www.frederickvollmer.com/orient/) .
+
+## Related Software
+The program [__Orient__](https://www.frederickvollmer.com/orient/) by this author is free software that includes this functionality, and numerous additional options. It runs on Macintosh, Windows, and Linux platforms.

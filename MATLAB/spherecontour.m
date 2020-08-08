@@ -1,160 +1,105 @@
-% File    : spherecontour.m
-% Version : 2.0.2.10
-% System  : Matlab/Octave
-% Author  : Frederick W. Vollmer
-% Date    : 23 Sep 2014
-% Update  : 01 Apr 2018
-%			Edited description.
-%           Corrected to set zmin to zero in contour function. 
-% Notice  : Copyright 1995-2018 F.W. Vollmer (see LICENSE & CITATION files)
+function [points,lines,frame,grid] = spherecontour(data,options,nlevels,ngrid,sigma,cint,cmin,cmax)
+% SPHERECONTOUR  Contoured spherical projection of directional data.
+%   Spherical coordinates are in a right-handed reference frame X=right 
+%   (east), Y=top (north), Z=up. Options are set in the string paramenter 
+%   'options'.
 %
-%
-% DESCRIPTION
-% -----------
-% MATLAB/Octave function for contouring directional orientation data on the 
-% sphere. This is an implementation of: 
-%
-%   F.W. Vollmer, 1995. C program for automatic contouring of spherical 
-%   orientation data using a modified Kamb method: Computers & Geosciences, 
-%   v. 21, n. 1, p. 31-49.
-%
-% which should be cited by publications using this code, algorithm, or 
-% derivative works to produce figures or other content. 
-%
-% Function for contouring spherical projections of directional orientation data 
-% (lines or poles to planes) using a modified Kamb method with density 
-% calculations done on the sphere (Vollmer, 1995). Options are given for 
-% equal-area or stereographic projections, in upper or lower hemispheres, of 
-% directed or non-directed data. A common plot in structural geology is a lower 
-% hemisphere equal-area projection, or 'Schmidt plot' (sometimes incorrectly 
-% referred to as a 'stereonet' or 'stereogram'). 
-%
-% Spherical coordinates are in a right-handed reference frame X = left, 
-% Y = top, Z = up. Default input is an array of (theta, phi) = (longitude, 
-% colatitude), however, options are provided for all common spherical angles. 
-% For NED (N = top, E = left, Z = down) coordinates use declination (azimuth 
-% or trend), strike, or dip direction options for theta, and inclination 
-% (plunge), dip, or nadir (anti-colatitude) options for phi.
-%
-% Contours can be equally spaced over the density distribution (default), or at 
-% a set contour interval. Options are specified with an input string, such as 
-% 'str,dip,deg' or 'dec,inc,deg', see below for all options.
+%   Input
+%   -----
+%   data    : array of [theta, phi] angles, see 'options' for available 
+%             formats.   
+%   options : include in string any non-default options:
+%              theta values:
+%                ''       = longitude (CCW from X=0 at right)
+%                'dec'    = azimuth, trend, declination (CW from Y=N)
+%                'str'    = strike (CW from Y=N at top)
+%                'dir'    = dip direction (CW from Y=N at top)
+%             phi values: 
+%               ''       = colatitude or zenith (down from Z=Up)
+%               'lat'    = altitude or latitude (up from XY plane)
+%               'inc'    = inclination or plunge (down from XY plane)
+%               'dip'    = dip of plane (down from XY plane)
+%               'nad'    = nadir (up from -Z=Down)
+%             angle format: 
+%               ''       = radians
+%               'deg'    = degrees
+%               'grd'    = gradians
+%             projection:
+%               ''       = equal area (Schmidt plot)
+%               'ste'    = stereographic (equal angle stereogram)
+%              hemisphere:
+%               ''       = lower hemisphere 
+%               'up'     = upper hemisphere
+%             data type:
+%               ''       = axes (undirected)
+%               'vec'    = vectors (directed)
+%             contouring method:
+%               ''       = modified Kamb 
+%               'mud'    = modified Kamb multiples of uniform density
+%               'sch'    = modified Schmidt (not recommended)
+%               'ncn'    = no contouring
+%             contour spacing:
+%               ''       = equal spaced levels over the density distribution, 
+%                          nlevels=10 divides pdd into 10, giving 9 contour 
+%                          lines 
+%               'int'    = set contour intervals (cint), from cmin to cmax
+%             contour smoothing:
+%                ''       = exponential (recommended)
+%               'sma'    = inverse area
+%               'sms'    = inverse area squared
+%               'nsm'    = none
+%             grid interpolation:
+%               ''       = 5 parts
+%               'gi0'    = off
+%               'gi2'    = 2 parts
+%               'gi3'    = 3 parts
+%               'gi4'    = 4 parts
+%               'gi5'    = 5 parts
+%               'gi6'    = 6 parts
+%               'gi8'    = 8 parts
+%               'gi10'   = 10 parts
+%             frame:     
+%	            ''       = circle and tics             
+%               'ntc'    = circle without tics              
+%	            'nfr'    = no frame 
+%             grid:
+%               ''       = grid     
+%               'ngd'    = no grid     
+%   nlevels : number of levels spaced over the density distribution for default 
+%             contouring, 10 will divide the pdd into 10, giving 9 contour 
+%             lines, default = 10 
+%   ngrid   : number of grid nodes, higher is more accurate but slower, 30 is 
+%             good for draft plots, 50 or more is recommended for final plots, 
+%             default = 30
+%   sigma   : Kamb method sigma in standard deviations, default = 3.0
+%   cint    : contour interval for interval option (off by default), 
+%             default = 3.0 
+%   cmin    : minimum contour for contour interval option, default = 3.0.
+%             Set to 1 or 2 for multiples of uniform density.
+%   cmax    : maxmum contour for contour interval option, default = 12.0
 % 
-% The standalone program 'Orient' by this author is free software that has 
-% numerous additional options, and is faster. It runs on Macintosh, Windows, 
-% and Linux platforms,  and is recommended over this function for 
-% non-MATLAB/Octave use. It can be downloaded for free from: 
-%
-%   www.frederickvollmer.com/orient
-%   www.newpaltz.edu/~vollmerf
-%
-% See README, LICENSE, and CITATION files for information on license and 
-% citation. Please contact the author for any bug reports:
-%
-% Frederick W. Vollmer
-% vollmerf@newpaltz.edu 
-% vollmerf@gmail.com
-%
-% INPUT
-% -----
-% data     : array of (theta, phi) angles, see 'options' for available formats, 
-% default
-%            is (longitude, colatitude), with theta as a CCW angle from X at 
-%            left, and phi the angle from upward Z axis.   
-% options  : include in string any non-default options (default = ''):
-%            theta values:
-%              ''       = longitude (CCW from X = 0 at left)
-%              'dec'    = azimuth, trend, declination (CW from Y = N at top)
-%              'str'    = strike (CW from Y = N at top)
-%              'dir'    = dip direction (CW from Y = N at top)
-%            phi values: 
-%              ''       = colatitude, zenith (angle from upward Z axis)
-%              'lat'    = altitude, latitude (up from XY plane)
-%              'inc'    = inclination, plunge (down from XY plane)
-%              'dip'    = dip of plane (down from XY plane)
-%              'nad'    = nadir (anti-colatitude, angle from downward -Z axis)
-%            angle format: 
-%              ''       = radians
-%              'deg'    = degrees
-%              'grd'    = gradians
-%            projection:
-%              ''       = equal area (Schmidt plot)
-%              'ste'    = stereographic (stereogram)
-%            hemisphere:
-%              ''       = lower hemisphere 
-%              'up'     = upper hemisphere
-%            data type:
-%              ''       = undirected axes
-%              'vec'    = directed vectors
-%            contouring method:
-%              ''       = modified Kamb 
-%              'sch'    = modified Schmidt (not recommended)
-%              'ncn'    = no contouring (only points will be returned)
-%            contour spacing:
-%              ''       = equal spaced levels over the density distribution, 
-%                         nlevels = 10 divides pdd into 10, giving 9 contour 
-%                         lines 
-%              'int'    = set contour intervals (cint), from cmin to cmax
-%            contour smoothing:
-%              ''       = exponential (recommended)
-%              'sma'    = inverse area
-%              'sms'    = inverse area squared
-%              'nsm'    = none
-%            grid interpolation:
-%              ''       = 5 parts
-%              'gi0'    = off
-%              'gi2'    = 2 parts
-%              'gi3'    = 3 parts
-%              'gi4'    = 4 parts
-%              'gi5'    = 5 parts
-%              'gi6'    = 6 parts
-%              'gi8'    = 8 parts
-%              'gi10'    = 10 parts
-%            frame:     
-%	           ''       = draw circle and tics             
-%	           'ntc'    = draw circle, without tics              
-%	           'nfr'    = no frame 
-%            grid:
-%              ''       = grid     
-%              'ngd'    = no grid     
-% nlevels  : number of levels spaced over the density distribution for default 
-%            contouring, 10 will divide the pdd into 10, giving 9 contour 
-%            lines, default = 10 
-% ngrid    : number of grid nodes, higher is more accurate but slower, 30 is 
-%            good for draft plots, 50 or more is recommended for final plots, 
-%            default = 30
-% sigma    : Kamb method sigma in standard deviations, default = 3.0
-% cint     : contour interval for interval option (off by default), 
-%            default = 3.0 
-% cmin     : minimum contour for contour interval option, default = 3.0
-% cmax     : maxmum contour for contour interval option, default = 12.0
-% 
-%
-% OUTPUT
+% Output
 % ------          
-% points : projected data points in unit circle as array of
-%          [x,y] = [points(:,1), points(:,2)]
-% lines  : projected contour line segments in unit circle as array of
-%          [x1,y1,x2,y2] = [lines(:,1), lines(:,2), lines(:,3), lines(:,4)]
-%          by default this includes tic marks and a circular frame
-% frame  : tic marks and circle as line segments, if on first four are tics.
-% grid   : grid for display of color gradient:
-%          imagesc(-1:1, -1:1, grid);   
+%   points  : projected data points in unit circle as array of
+%             [x,y] = [points(:,1), points(:,2)]
+%   lines   : projected contour line segments in unit circle as array of
+%             [x1,y1,x2,y2] = [lines(:,1), lines(:,2), lines(:,3), lines(:,4)]
+%             by default this includes tic marks and a circular frame
+%   frame   : tic marks and circle as line segments, if on first four are tics.
+%   grid    : grid for display of color gradient:
+%             imagesc(-1:1, -1:1, grid);   
 % 
-% USAGE
+% Usage
 % -----
 % All input parameters except 'data' are optional. Output parameter 'grid' is 
 % optional. See included test file 'test.m'.
 %
 % [points] = spherecontour(m);
-% [points, lines] = spherecontour(m);
-% [points, lines, frame] = spherecontour(m);
-% [points, lines, frame] = spherecontour(m, 'str,dip,deg');
-% [points, lines, frame, grid] = spherecontour(m, 'dec,inc,deg', 8, 50);
-%
-%------------------------------------------------------------------------------
+% [points,lines] = spherecontour(m);
+% [points,lines,frame] = spherecontour(m);
+% [points,lines,frame] = spherecontour(m,'str,dip,deg,5,50');
+% [points,lines,frame,grid] = spherecontour(m,'dec,inc,deg,mud',5,50,3,1);
 
-function [points, lines, frame, grid] = spherecontour(data, options, nlevels, ngrid, sigma, cint, cmin, cmax)
   switch nargin
     case 1
       options = '';
@@ -260,9 +205,9 @@ function [grid] = processGrid(grid, interp)
   grid = zi;
 end
 
-% sphereProject - projects direction cosines to cartesian coordinates of 
-% unit spherical projection.                                             
 function [x, y, visible] = sphereProject(dc, proj, hemi, direct) 
+% sphereProject  Projects direction cosines to cartesian coordinates of 
+% unit spherical projection.                                             
   t = dc;
   if (hemi == 0) % lower 
     t(3) = -t(3);
@@ -286,9 +231,9 @@ function [x, y, visible] = sphereProject(dc, proj, hemi, direct)
   end
 end
 
-% sphereBProject - back projects cartesian coordinates of unit spherical 
-% projection to direction cosines.                                       
 function [dc] = sphereBProject(x, y, proj, hemi) 
+% sphereBProject  Back projects cartesian coordinates of unit spherical 
+% projection to direction cosines.                                       
   r2 = (x*x)+(y*y);
   if (proj == 1) % stereographic  
     dc(3) = (1.0-r2)/(1.0+r2); 
@@ -304,16 +249,16 @@ function [dc] = sphereBProject(x, y, proj, hemi)
   end
 end
 
-% toDirCos - converts theta, phi in radians to XYZ direction cosines. 
 function [dc] = toDirCos(theta, phi) 
+% toDirCos  Converts theta, phi in radians to XYZ direction cosines. 
   s = sin(phi);
   dc(1) = cos(theta) * s;
   dc(2) = sin(theta) * s;
   dc(3) = cos(phi);   
 end
 
-% toSpherePhi - convert from user coordinates in radians to colatitude (phi) in radians.
 function [spherePhi] = toSpherePhi(phi, fmt)
+% toSpherePhi  Convert from user coordinates in radians to colatitude (phi) in radians.
   switch fmt 
     case 0 % colatitude
       p = phi;
@@ -331,9 +276,9 @@ function [spherePhi] = toSpherePhi(phi, fmt)
   spherePhi = p;
 end
 
-% toSphereTheta - convert from user coordinates in radians to longitude (theta) in 
-% radians.
 function [sphereTheta] = toSphereTheta(theta, fmt)
+% toSphereTheta  Convert from user coordinates in radians to longitude (theta) in 
+% radians.
   switch fmt
     case 0 % longitude
       t = theta;
@@ -349,9 +294,9 @@ function [sphereTheta] = toSphereTheta(theta, fmt)
   sphereTheta = t;
 end
 
-% lineCircleInt - determine intersection parameters for line segment and 
-% circle. Adopted from Rankin 1989, p.220.                               
 function [t1, t2, visible] = lineCircleInt(x1, y1, x2, y2, xc, yc, r) 
+% lineCircleInt  Determine intersection parameters for line segment and 
+% circle. Adopted from Rankin 1989, p.220.                               
   visible = 0; % FALSE
   t1 = 0.0;
   t2 = 1.0;
@@ -376,8 +321,8 @@ function [t1, t2, visible] = lineCircleInt(x1, y1, x2, y2, xc, yc, r)
   end
 end
 
-% clipLineCircle - clip line segment to circle. 
 function [cx1, cy1, cx2, cy2, visible] = clipLineCircle(xc, yc, r, x1, y1, x2, y2) 
+% clipLineCircle  Clip line segment to circle. 
   cx1 = x1;
   cy1 = y1;
   cx2 = x2;
@@ -408,10 +353,9 @@ function [cx1, cy1, cx2, cy2, visible] = clipLineCircle(xc, yc, r, x1, y1, x2, y
   visible = 1; % TRUE
 end
 
-% gridKamb - calculates grid of density estimates from direction cosine 
-% data. The grid is normalized to the contour units.                
 function [grid] = gridKamb(x, ngrid, sigma, opts)
-  % use local variables in nested loops
+% gridKamb  Calculates grid of density estimates from direction cosine 
+% data. The grid is normalized to the contour units.                
   smooth = opts.smooth; 
   hemi = opts.hemi;
   direct = opts.direct;
@@ -478,15 +422,23 @@ function [grid] = gridKamb(x, ngrid, sigma, opts)
     end % j
     xg = xg + dx;
   end % i
-  zMin = 1e30; 
-  zMax = 1e-30;
-  f = 1.0/zUnit;  
+  %zMin = 1e30; 
+  %zMax = 1e-30;
+  
+  g = 1.0/zUnit;  
+  
+  if direct then
+    g = 2.0 * f / ndata
+  else
+    g = f / ndata
+  end
+  
   %grid = (grid - 0.5) * f;
-  grid = grid * f;
+  grid = grid * g;
 end
 
-% interpolate - determine linear interpolation point between two nodes. 
 function [x, y, bool] = interpolate(x1, y1, z1, x2, y2, z2, z0)
+% interpolate  Determine linear interpolation point between two nodes. 
   dz1 = z0-z1; 
   dz2 = z0-z2;
   if (dz1 == 0.0) 
@@ -510,8 +462,8 @@ function [x, y, bool] = interpolate(x1, y1, z1, x2, y2, z2, z0)
   end
 end
 
-% contourGrid - output one contour level by linear interpolation among grid nodes.
 function [lines] = contourGrid(lines, x1, y1, x2, y2, grid, level)
+% contourGrid   Output one contour level by linear interpolation among grid nodes.
   [ng,mg] = size(grid);
   dnx = (x2-x1)/(ng-1.0); 
   dny = (y2-y1)/(mg-1.0);
@@ -576,13 +528,13 @@ function [lines] = contourGrid(lines, x1, y1, x2, y2, grid, level)
   end % i
 end
 
-% lineOut - output a line segment 
 function [lines] = lineOut(lines, x1, y1, x2, y2) 
+% lineOut  Output a line segment 
   lines = [lines; [x1,y1,x2,y2]];
 end
 
-% cLineOut - output a line segment clipped to current projection. 
 function [lines] = cLineOut(lines, x1, y1, x2, y2) 
+% cLineOut  Output a line segment clipped to current projection. 
   [cx1, cy1, cx2, cy2, visible] = clipLineCircle(0.0, 0.0, 1.0, x1, y1, x2, y2); 
   if (visible)
     lines = [lines; [cx1,cy1,cx2,cy2]];
@@ -591,9 +543,8 @@ function [lines] = cLineOut(lines, x1, y1, x2, y2)
   end
 end
 
-% contour - grids data and outputs contours. 
 function [grid, lines] = contour(dc, ngrid, sigma, nlevels, cint, cmin, cmax, opts) 
-  %if (nData == 0) return;
+% contour  Grids data and outputs contours. 
   grid = gridKamb(dc, ngrid, sigma, opts);  
   zmin = 0.0;
   zmax = max(max(grid));
@@ -618,8 +569,8 @@ function [grid, lines] = contour(dc, ngrid, sigma, nlevels, cint, cmin, cmax, op
   end
 end
 
-% drawCircle - output a circle, adopted from Rodgers and Adams, 1976, p. 216. 
 function [lines] = drawCircle(lines, x, y, radius, n)
+% drawCircle  Output a circle, adopted from Rodgers and Adams, 1976, p. 216. 
   ainc = 2.0 * pi/n;
   c1 = cos(ainc); 
   s1 = sin(ainc);
@@ -634,8 +585,8 @@ function [lines] = drawCircle(lines, x, y, radius, n)
   end
 end
 
-% drawFrame - output projection frame. 
 function [frame] = drawFrame(frameopt)
+% drawFrame  Output projection frame. 
   frame = zeros(0,4);
   if (frameopt == 0)
     ts = 0.05;
