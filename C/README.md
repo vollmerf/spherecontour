@@ -18,7 +18,7 @@ Please see [LICENSE](LICENSE.md) and [CITATION](CITATION.md) for license and cit
  command line version (SPHERECON) created using Borland C. It has not been updated to run on Object Pascal (Delphi / Free Pascal). 
 
 ## Notes
-This is the C code published in Vollmer 1995. It is a command line version (SPHERECON) created using Borland Turbo C++ and BGI graphics. The algorithms. It has not been updated to run in modern Object Pascal (Delphi / Free Pascal), and has been superseded by [__Orient__](https://www.frederickvollmer.com/orient/) .
+This is the C code published in Vollmer 1995. It is a command line version (SPHERECON) created using Borland Turbo C++ and BGI graphics. The algorithms. It has not been updated to run in modern Object Pascal (Delphi / Free Pascal), and has been superseded by [__Orient__](https://vollmerf.github.io/orient/) .
 
 ## Related Software
-The program [__Orient__](https://www.frederickvollmer.com/orient/) by this author is free software that includes this functionality, and numerous additional options. It runs on Macintosh, Windows, and Linux platforms.
+The program [__Orient__](https://vollmerf.github.io/orient/) by this author is free software that includes this functionality, and numerous additional options. It runs on Macintosh, Windows, and Linux platforms.
