@@ -12,8 +12,7 @@ which should be cited by publications using this code, algorithm, or derivative
 works, to produce figures or other content. 
 
 ## License
-Please see [LICENSE](LICENSE.md) and [CITATION](CITATION.md) for license restrictions and citation 
-information.
+Please see [LICENSE](LICENSE.md) and [CITATION](CITATION.md) for license and citation information.
 
 ## Notes
  command line version (SPHERECON) created using Borland C. It has not been updated to run on Object Pascal (Delphi / Free Pascal). 
