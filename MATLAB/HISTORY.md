@@ -1,4 +1,4 @@
-% spherecontour.m History  
+# spherecontour.m History  
 
 2.0.0 (2014-09-23)
 * Initial public release.
@@ -13,7 +13,7 @@
 * Moved description to be self-documenting. 
 * Added check in "test.m" for "_sd" in file name to indicate strike and dip.
 * Fixed errors in documentation. 
-* Added multiples of uniform density (MUD) option.
+* Added multiples of uniform density option, 'mud'.
 * Changed function parameters to: data,options,nlevels,ngrid,cint,sigma. 
 * Parameters cmin and cmax are no longer used, contours start at cint and continue to maximum density.
 * Degrees are now default units.
