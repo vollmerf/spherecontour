@@ -12,7 +12,7 @@ which should be cited by publications using this code, algorithm, or derivative
 works, to produce figures or other content. 
 
 ## License
-Please see the [LICENSE](LICENSE.md) and CITATION(CITATION.md) files for license restrictions and citation 
+Please see [LICENSE](LICENSE.md) and [CITATION](CITATION.md) for license restrictions and citation 
 information.
 
 ## Notes
