@@ -42,18 +42,24 @@ axis('off');
 % solution 1 - choose colormap with first element = white:
 %cmap = gray(256);
 %colormap(flipud(cmap));
-lc = 256;
-c1 = [1,1,1];
-c2 = [1,0,0];
-clin = [linspace(c1(1),c2(1),lc)', linspace(c1(2),c2(2),lc)', ... 
-        linspace(c1(3),c2(3),lc)'];
-colormap(clin);
+%lc = 256;
+%c1 = [1,1,1];
+%c2 = [1,0,0];
+%clin = [linspace(c1(1),c2(1),lc)', linspace(c1(2),c2(2),lc)', ... 
+%        linspace(c1(3),c2(3),lc)'];
+%colormap(clin);
 
 % solution 2 - replace NaN with -0.1 and first colormap element=white
 %cmap = jet(256);
 %cmap(1,:) = [1 1 1];
 %colormap(cmap);
 %grid(isnan(grid)) = -0.1;
+
+% solution 3 - define WBGYR colormap, image outside plot is white
+T = [255,255,255;0,0,255;0,255,0;255,255,0;255,0,0]./255; 
+x = [0,64,128,192,255];
+cmap = interp1(x/255,T,linspace(0,1,255));
+colormap(cmap);
 
 % plot grid as color gradient
 imagesc(-1:1, -1:1, grid);
@@ -84,6 +90,6 @@ end
 px = points(:,1); 
 py = points(:,2); 
 h = plot(px, py, 'o');
-set(h(1),'MarkerEdgeColor','k','MarkerFaceColor','w', 'MarkerSize', 10)
+set(h(1),'MarkerEdgeColor','k','MarkerFaceColor','w', 'MarkerSize', 8)
 
 hold off;

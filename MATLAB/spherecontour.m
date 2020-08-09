@@ -5,8 +5,7 @@ function [points,lines,frame,grid] = spherecontour( ...
 %   (E), Y=top (N), Z=up. Options are set in the string paramenter 
 %   'options'.
 %
-%   Input
-%   -----
+% Input
 %   data    : array of [theta, phi] angles, see 'options' for formats.   
 %   options : include in string any non-default options:
 %             theta values:
@@ -47,7 +46,7 @@ function [points,lines,frame,grid] = spherecontour( ...
 %               'sma'    = inverse area
 %               'sms'    = inverse area squared
 %               'nsm'    = none
-%             grid interpolation: fix edge effect due to square grid
+%             grid interpolation: fixes edge effect due to square grid
 %               ''       = 5 parts
 %               'gi0'    = off
 %               'gi2'    = 2 parts
@@ -63,33 +62,27 @@ function [points,lines,frame,grid] = spherecontour( ...
 %	            'nfr'    = no frame 
 %             grid:
 %               ''       = grid     
-%               'ngd'    = no grid  
-%             
+%               'ngd'    = no grid  %             
 %   nlevels : number of levels spaced over the distribution, 10 will 
 %             give 9 contour lines, default = 10, unused for 'cint' option 
 %   ngrid   : number of grid nodes, use 30 for draft plots, 50 or more for 
 %             final plots, default = 30
 %   cint    : contour interval for 'cint' option, default = 1.0 
 %   sigma   : Kamb method sigma in standard deviations, default = 3.0
-% 
+%
 % Output
-% ------          
 %   points  : projected data points in unit circle as [x,y]
 %   lines   : projected contour line segments in unit circle as 
 %             [x1,y1,x2,y2], includes tick marks and a circular frame
 %   frame   : tick marks and circle as line segments, first four are ticks
-%   grid    : grid for display of color gradient    
+%   grid    : grid for display of color gradient   
 % 
-% Usage
-% -----
-% All input parameters except 'data' are optional. Output parameter 'grid' 
-% is optional. See test file 'test.m'.
-%
-% [points]=spherecontour(m);
-% [points,lines]=spherecontour(m);
-% [points,lines,frame]=spherecontour(m);
-% [points,lines,frame]=spherecontour(m,'str,dip',5,50);
-% [points,lines,frame,grid]=spherecontour(m,'dec,inc,mud,cint',5,50);
+% Syntax
+%   [points]=spherecontour(m);
+%   [points,lines]=spherecontour(m);
+%   [points,lines,frame]=spherecontour(m);
+%   [points,lines,frame]=spherecontour(m,'str,dip',5,50);
+%   [points,lines,frame,grid]=spherecontour(m,'dec,inc,mud,cint',5,50);
 
   switch nargin
     % data,options,nlevels,ngrid,cint,sigma

@@ -21,4 +21,5 @@
 * Option 'ste' changed to 'stereo'.
 * Option 'ncn' changed to 'ncon'.
 * Option 'up' changed to 'upper'.
+* Changed colormap in 'test.m'.
 
