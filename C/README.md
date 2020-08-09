@@ -1,5 +1,5 @@
 # SphereContour
-Program for automatic contouring of spherical orientation data using a modified Kamb method to create spherical projections including Schmidt (equal-area) and stereographic (equal-angle) plots. Additional files include data files. 
+Program for automatic contouring of spherical orientation data using a modified Kamb method to create spherical projections including Schmidt (equal-area) and stereographic (equal-angle) plots. Additional files include example data files. 
 
 ## Citation
 This repostory contains a C implementation of the algorithm presented in:
