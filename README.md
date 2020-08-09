@@ -21,7 +21,7 @@ See [LICENSE](LICENSE.md) and [CITATION](CITATION.md) for license and citation i
 [SphereContour](https://github.com/vollmerf/spherecontour)
 
 ## Related Software
-The program [Orient](https://vollmerf.github.io/orient/) by this author is free software that includes this functionality, and numerous additional options. It runs on Macintosh, Windows, and Linux platforms. 
+The program [Orient](https://vollmerf.github.io/orient) by this author is free software that includes this functionality, and numerous additional options. It runs on Macintosh, Windows, and Linux platforms. 
 
 --- 
 

@@ -7,7 +7,7 @@
 % Notice  : Copyright 2014-2020
 % License : See LICENSE
 %
-% The algorithm used in this software is described in:
+% The algorithms used in this software are described in:
 %
 %  __F.W. Vollmer, 1995. C program for automatic contouring of spherical 
 %  orientation data using a modified Kamb method: Computers & Geosciences, 
@@ -19,17 +19,15 @@
 
 % get comma delimited test file
 [filename, pathname] = uigetfile( {'*.csv'});
-m = csvread([pathname, filename]);
+m = csvread([pathname,filename]);
 if isempty(strfind(filename, '_sd'))
-  opts = 'dec,inc,deg,int,mud'; % declination, inclination in degrees
+  opts = 'dec,inc,cint,mud'; % declination, inclination in degrees
 else
-  opts = 'str,dip,deg,int,mud'; % strike, dip in degrees
+  opts = 'str,dip,cint,mud'; % strike, dip in degrees
 end
 
 % create a Schmidt plot (lower hemisphere equal-area projection)
-%[points, lines, frame, grid] = spherecontour(m, opts, 5, 50);
-% multiples of uniform density, nlevels (5) not used
-[points,lines,frame,grid] = spherecontour(m,opts,5,50,3,1,1);
+[points,lines,frame,grid] = spherecontour(m,opts,5,50);
 
 % set up figure
 figure;
@@ -44,21 +42,18 @@ axis('off');
 % solution 1 - choose colormap with first element = white:
 %cmap = gray(256);
 %colormap(flipud(cmap));
-
-% solution 2 - replace NaN with negative value and set first colormap element = white:
-%cmap = jet(256);
-%cmap(1,:) = [1 1 1];
-%colormap(cmap);
-%grid(isnan(grid)) = -0.1;
-
-% solution 3 - choose colormap with first element = white:
-% create a linear color map from white to red
 lc = 256;
 c1 = [1,1,1];
 c2 = [1,0,0];
 clin = [linspace(c1(1),c2(1),lc)', linspace(c1(2),c2(2),lc)', ... 
         linspace(c1(3),c2(3),lc)'];
 colormap(clin);
+
+% solution 2 - replace NaN with -0.1 and first colormap element=white
+%cmap = jet(256);
+%cmap(1,:) = [1 1 1];
+%colormap(cmap);
+%grid(isnan(grid)) = -0.1;
 
 % plot grid as color gradient
 imagesc(-1:1, -1:1, grid);
@@ -73,15 +68,15 @@ for i = 1:n
   line ('XData', lx, 'YData', ly, 'Color', 'k', 'LineWidth', 2);
 end
 
-% plot frame, returned as array of (x1, y1, x2, y2), first four are tics
+% plot frame, returned as array of (x1, y1, x2, y2), first four are ticks
 [n,m] = size(frame);
 for i = 1:n
   lx = [frame(i,1), frame(i,3)];
   ly = [frame(i,2), frame(i,4)]; 
-  if i <= 4
+  if i <= 4 % ticks
     line ('XData', lx, 'YData', ly, 'Color', 'k', 'LineWidth', 2);
-  else
-    line ('XData', lx, 'YData', ly, 'Color', 'k', 'LineWidth', 4);
+  else % circle
+    line ('XData', lx, 'YData', ly, 'Color', 'k', 'LineWidth', 2);
   end
 end
 

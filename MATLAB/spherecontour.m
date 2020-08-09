@@ -1,35 +1,35 @@
-function [points,lines,frame,grid] = spherecontour(data,options,nlevels,ngrid,sigma,cint,cmin,cmax)
+function [points,lines,frame,grid] = spherecontour( ...
+  data,options,nlevels,ngrid,cint,sigma)
 % SPHERECONTOUR  Contoured spherical projection of directional data.
 %   Spherical coordinates are in a right-handed reference frame X=right 
-%   (east), Y=top (north), Z=up. Options are set in the string paramenter 
+%   (E), Y=top (N), Z=up. Options are set in the string paramenter 
 %   'options'.
 %
 %   Input
 %   -----
-%   data    : array of [theta, phi] angles, see 'options' for available 
-%             formats.   
+%   data    : array of [theta, phi] angles, see 'options' for formats.   
 %   options : include in string any non-default options:
-%              theta values:
-%                ''       = longitude (CCW from X=0 at right)
-%                'dec'    = azimuth, trend, declination (CW from Y=N)
-%                'str'    = strike (CW from Y=N at top)
-%                'dir'    = dip direction (CW from Y=N at top)
+%             theta values:
+%               ''       = longitude (CCW from X=0 at right)
+%               'dec'    = azimuth, trend, declination (CW from Y=N)
+%               'str'    = strike (CW from Y=N at top)
+%               'dir'    = dip direction (CW from Y=N at top)
 %             phi values: 
-%               ''       = colatitude or zenith (down from Z=Up)
+%               ''       = colatitude or zenith (down from Z)
 %               'lat'    = altitude or latitude (up from XY plane)
 %               'inc'    = inclination or plunge (down from XY plane)
 %               'dip'    = dip of plane (down from XY plane)
-%               'nad'    = nadir (up from -Z=Down)
+%               'nad'    = nadir (up from -Z)
 %             angle format: 
-%               ''       = radians
-%               'deg'    = degrees
+%               ''       = degrees
+%               'rad'    = radians
 %               'grd'    = gradians
 %             projection:
 %               ''       = equal area (Schmidt plot)
-%               'ste'    = stereographic (equal angle stereogram)
-%              hemisphere:
+%               'stereo' = stereographic (stereogram)
+%             hemisphere:
 %               ''       = lower hemisphere 
-%               'up'     = upper hemisphere
+%               'upper'  = upper hemisphere
 %             data type:
 %               ''       = axes (undirected)
 %               'vec'    = vectors (directed)
@@ -37,18 +37,17 @@ function [points,lines,frame,grid] = spherecontour(data,options,nlevels,ngrid,si
 %               ''       = modified Kamb 
 %               'mud'    = modified Kamb multiples of uniform density
 %               'sch'    = modified Schmidt (not recommended)
-%               'ncn'    = no contouring
+%               'ncon'   = no contouring
 %             contour spacing:
-%               ''       = equal spaced levels over the density distribution, 
-%                          nlevels=10 divides pdd into 10, giving 9 contour 
-%                          lines 
-%               'int'    = set contour intervals (cint), from cmin to cmax
+%               ''       = equal spaced levels, nlevels=10 gives 9 contour 
+%                          lines
+%               'cint'   = set contour intervals (cint)
 %             contour smoothing:
-%                ''       = exponential (recommended)
+%               ''       = exponential (recommended)
 %               'sma'    = inverse area
 %               'sms'    = inverse area squared
 %               'nsm'    = none
-%             grid interpolation:
+%             grid interpolation: fix edge effect due to square grid
 %               ''       = 5 parts
 %               'gi0'    = off
 %               'gi2'    = 2 parts
@@ -64,83 +63,63 @@ function [points,lines,frame,grid] = spherecontour(data,options,nlevels,ngrid,si
 %	            'nfr'    = no frame 
 %             grid:
 %               ''       = grid     
-%               'ngd'    = no grid     
-%   nlevels : number of levels spaced over the density distribution for default 
-%             contouring, 10 will divide the pdd into 10, giving 9 contour 
-%             lines, default = 10 
-%   ngrid   : number of grid nodes, higher is more accurate but slower, 30 is 
-%             good for draft plots, 50 or more is recommended for final plots, 
-%             default = 30
+%               'ngd'    = no grid  
+%             
+%   nlevels : number of levels spaced over the distribution, 10 will 
+%             give 9 contour lines, default = 10, unused for 'cint' option 
+%   ngrid   : number of grid nodes, use 30 for draft plots, 50 or more for 
+%             final plots, default = 30
+%   cint    : contour interval for 'cint' option, default = 1.0 
 %   sigma   : Kamb method sigma in standard deviations, default = 3.0
-%   cint    : contour interval for interval option (off by default), 
-%             default = 3.0 
-%   cmin    : minimum contour for contour interval option, default = 3.0.
-%             Set to 1 or 2 for multiples of uniform density.
-%   cmax    : maxmum contour for contour interval option, default = 12.0
 % 
 % Output
 % ------          
-%   points  : projected data points in unit circle as array of
-%             [x,y] = [points(:,1), points(:,2)]
-%   lines   : projected contour line segments in unit circle as array of
-%             [x1,y1,x2,y2] = [lines(:,1), lines(:,2), lines(:,3), lines(:,4)]
-%             by default this includes tic marks and a circular frame
-%   frame   : tic marks and circle as line segments, if on first four are tics.
-%   grid    : grid for display of color gradient:
-%             imagesc(-1:1, -1:1, grid);   
+%   points  : projected data points in unit circle as [x,y]
+%   lines   : projected contour line segments in unit circle as 
+%             [x1,y1,x2,y2], includes tick marks and a circular frame
+%   frame   : tick marks and circle as line segments, first four are ticks
+%   grid    : grid for display of color gradient    
 % 
 % Usage
 % -----
-% All input parameters except 'data' are optional. Output parameter 'grid' is 
-% optional. See included test file 'test.m'.
+% All input parameters except 'data' are optional. Output parameter 'grid' 
+% is optional. See test file 'test.m'.
 %
-% [points] = spherecontour(m);
-% [points,lines] = spherecontour(m);
-% [points,lines,frame] = spherecontour(m);
-% [points,lines,frame] = spherecontour(m,'str,dip,deg,5,50');
-% [points,lines,frame,grid] = spherecontour(m,'dec,inc,deg,mud',5,50,3,1);
+% [points]=spherecontour(m);
+% [points,lines]=spherecontour(m);
+% [points,lines,frame]=spherecontour(m);
+% [points,lines,frame]=spherecontour(m,'str,dip',5,50);
+% [points,lines,frame,grid]=spherecontour(m,'dec,inc,mud,cint',5,50);
 
   switch nargin
+    % data,options,nlevels,ngrid,cint,sigma
     case 1
       options = '';
       nlevels = 10;
       ngrid = 30;
+      cint = 1.0;
       sigma = 3.0;
-      cint = 3.0;
-      cmin = 3.0;
-      cmax = 12.0;
     case 2
       nlevels = 10;
       ngrid = 30;
+      cint = 1.0;
       sigma = 3.0;
-      cint = 3.0;
-      cmin = 3.0;
-      cmax = 12.0;
     case 3
       ngrid = 30;
+      cint = 1.0;
       sigma = 3.0;
-      cint = 3.0;
-      cmin = 3.0;
-      cmax = 12.0;
     case 4
+      cint = 1.0;
       sigma = 3.0;
-      cint = 3.0;
-      cmin = 3.0;
-      cmax = 12.0;
     case 5
       sigma = 3.0;
-      cmin = 3.0;
-      cmax = 12.0;
     case 6
-      cmin = 3.0;
-      cmax = 12.0;
-    case 7
-      cmax = 12.0;
-    case 8
-      cmax = cmax;
+      sigma = sigma;
     otherwise
-     return
-  end   
+      return
+  end  
+  cmin = cint;
+  cmax = 1000.0; % not used
   if nargout < 4 % no grid
     opts.grid = 1
   end
@@ -170,7 +149,7 @@ function [points,lines,frame,grid] = spherecontour(data,options,nlevels,ngrid,si
     p = toSpherePhi(f*data(i,2), opts.phifmt);
     d = toDirCos(t, p);
     dc(i,:) = d(:);
-    [x, y, visible] = sphereProject(d, opts.proj, opts.hemi, opts.direct);
+    [x, y, visible] = sphereProject(d, opts.proj, opts.hemi, opts.directed);
     if visible
       c = c + 1;
       pts(c,1) = x; 
@@ -188,8 +167,12 @@ function [points,lines,frame,grid] = spherecontour(data,options,nlevels,ngrid,si
 end
 
 function [grid] = processGrid(grid, interp)
+% PROCESSGRID  Process the final grid for output.
+% The number of grid nodes is increased and intermediate values 
+% interpolated. This is done to fix edge effects at the perimeter due to 
+% the square grid. Nodes outside the circle are set to NaN.
   grid = grid';
-  [n, m] = size(grid);
+  [n,m] = size(grid);
   [x y] = meshgrid(1:n);
   if (interp < 0.0)
     zi = grid;
@@ -197,28 +180,29 @@ function [grid] = processGrid(grid, interp)
     [xi yi] = meshgrid(1:interp:n);
     zi = interp2(x,y,grid,xi,yi);
   end
-  [ni, mi] = size(zi);
+  [ni,mi] = size(zi);
   r = 0.5 * (ni-1);
-  r2 = r * r;
+  r2 = r*r;
   [xi yi] = meshgrid(1:ni);
-  zi((xi - r - 1.0).^2 + (yi - r -1.0).^2 > r2) = NaN;
+  % NaN nodes outside circle
+  zi((xi-r-1.0).^2 + (yi-r-1.0).^2 > r2) = NaN;
   grid = zi;
 end
 
-function [x, y, visible] = sphereProject(dc, proj, hemi, direct) 
-% sphereProject  Projects direction cosines to cartesian coordinates of 
+function [x, y, visible] = sphereProject(dc, proj, hemi, directed) 
+% SPHEREPROJECT  Projects direction cosines to cartesian coordinates of 
 % unit spherical projection.                                             
   t = dc;
   if (hemi == 0) % lower 
     t(3) = -t(3);
   end
-  if (direct == 0) && (t(3) < 0.0)
+  if (directed == false) && (t(3) < 0.0)
     t = -t;
   end
   if (t(3) < 0.0)
     x = 99.0;
     y = 99.0;
-    visible = 0; % FALSE
+    visible = false; 
   else
     if (proj == 1) % stereographic 
       f = 1.0/(1.0+t(3));
@@ -227,12 +211,12 @@ function [x, y, visible] = sphereProject(dc, proj, hemi, direct)
     end
     x = f*t(1); 
     y = f*t(2);
-    visible = 1; % TRUE
+    visible = true; 
   end
 end
 
 function [dc] = sphereBProject(x, y, proj, hemi) 
-% sphereBProject  Back projects cartesian coordinates of unit spherical 
+% SPHEREBPROJECT  Back projects Cartesian coordinates of unit spherical 
 % projection to direction cosines.                                       
   r2 = (x*x)+(y*y);
   if (proj == 1) % stereographic  
@@ -250,7 +234,7 @@ function [dc] = sphereBProject(x, y, proj, hemi)
 end
 
 function [dc] = toDirCos(theta, phi) 
-% toDirCos  Converts theta, phi in radians to XYZ direction cosines. 
+% TODIRCOS  Converts theta, phi in radians to XYZ direction cosines. 
   s = sin(phi);
   dc(1) = cos(theta) * s;
   dc(2) = sin(theta) * s;
@@ -258,7 +242,8 @@ function [dc] = toDirCos(theta, phi)
 end
 
 function [spherePhi] = toSpherePhi(phi, fmt)
-% toSpherePhi  Convert from user coordinates in radians to colatitude (phi) in radians.
+% TOSPHEREPHI  Convert from user coordinates in radians to colatitude 
+% (phi) in radians.
   switch fmt 
     case 0 % colatitude
       p = phi;
@@ -277,8 +262,8 @@ function [spherePhi] = toSpherePhi(phi, fmt)
 end
 
 function [sphereTheta] = toSphereTheta(theta, fmt)
-% toSphereTheta  Convert from user coordinates in radians to longitude (theta) in 
-% radians.
+% TOSPHERETHETA  Convert from user coordinates in radians to longitude 
+% (theta) in radians.
   switch fmt
     case 0 % longitude
       t = theta;
@@ -295,9 +280,9 @@ function [sphereTheta] = toSphereTheta(theta, fmt)
 end
 
 function [t1, t2, visible] = lineCircleInt(x1, y1, x2, y2, xc, yc, r) 
-% lineCircleInt  Determine intersection parameters for line segment and 
+% LNECIRCLEINT  Determine intersection parameters for line segment and 
 % circle. Adopted from Rankin 1989, p.220.                               
-  visible = 0; % FALSE
+  visible = false;
   t1 = 0.0;
   t2 = 1.0;
   dx = x2-x1; 
@@ -317,17 +302,17 @@ function [t1, t2, visible] = lineCircleInt(x1, y1, x2, y2, xc, yc, r)
       t1 = t2; 
       t2 = t; 
     end
-    visible = 1; % TRUE
+    visible = true; 
   end
 end
 
 function [cx1, cy1, cx2, cy2, visible] = clipLineCircle(xc, yc, r, x1, y1, x2, y2) 
-% clipLineCircle  Clip line segment to circle. 
+% CLIPLINECIRCLE  Clip line segment to circle. 
   cx1 = x1;
   cy1 = y1;
   cx2 = x2;
   cy2 = y2;
-  visible = 0; % FALSE 
+  visible = false; 
   if (((x1 < xc-r) && (x2 < xc-r)) || ((x1 > xc+r) && (x2 > xc+r)))
     return;                  
   end
@@ -339,7 +324,7 @@ function [cx1, cy1, cx2, cy2, visible] = clipLineCircle(xc, yc, r, x1, y1, x2, y
     return;  
   end
   if ((t2 < 0.0) || (t1 > 1.0))
-    visible = 0; % FALSE 
+    visible = false; 
     return;
   end
   if (t1 > 0.0) 
@@ -350,15 +335,15 @@ function [cx1, cy1, cx2, cy2, visible] = clipLineCircle(xc, yc, r, x1, y1, x2, y
     cx2 = x1 + (x2-x1) * t2; 
     cy2 = y1 + (y2-y1) * t2; 
   end
-  visible = 1; % TRUE
+  visible = true;
 end
 
 function [grid] = gridKamb(x, ngrid, sigma, opts)
-% gridKamb  Calculates grid of density estimates from direction cosine 
+% GRIDKAMB  Calculates grid of density estimates from direction cosine 
 % data. The grid is normalized to the contour units.                
   smooth = opts.smooth; 
   hemi = opts.hemi;
-  direct = opts.direct;
+  directed = opts.directed;
   proj = opts.proj;
   [ndata,mdata] = size(x);
   if (opts.method == 1) % schmidt
@@ -368,7 +353,7 @@ function [grid] = gridKamb(x, ngrid, sigma, opts)
     a = (sigma*sigma)/(ndata+sigma*sigma);    
     zUnit = sqrt(ndata*a*(1.0-a));            
   end
-  if (opts.direct == 1) % vectors
+  if (opts.directed == true) % vectors
     alpha = 1.0-2.0*a;   
   else % axes 
     alpha = 1.0-a;
@@ -381,7 +366,7 @@ function [grid] = gridKamb(x, ngrid, sigma, opts)
     case 3 % none  
       f = 1.0;
     otherwise % exponential  
-      if (direct == 1) % vectors
+      if (directed == true) % vectors
         f = 1.0 + ndata/(sigma*sigma);
         zUnit = sqrt(ndata*(f-1.0)/(4.0*f*f));  
       else % axes
@@ -398,7 +383,7 @@ function [grid] = gridKamb(x, ngrid, sigma, opts)
       y = sphereBProject(xg,yg,proj,hemi);
       for k = 1:ndata;
         d = dot(y,x(k,:));
-        if (direct == 0) 
+        if (directed == false) 
           d = abs(d);
         end
         switch smooth 
@@ -422,48 +407,45 @@ function [grid] = gridKamb(x, ngrid, sigma, opts)
     end % j
     xg = xg + dx;
   end % i
-  %zMin = 1e30; 
-  %zMax = 1e-30;
-  
-  g = 1.0/zUnit;  
-  
-  if direct then
-    g = 2.0 * f / ndata
+  if opts.mud 
+    if directed then
+      g = 2.0 * f / ndata;
+    else
+      g = f / ndata;
+    end
   else
-    g = f / ndata
+    g = 1.0/zUnit;  
   end
-  
-  %grid = (grid - 0.5) * f;
   grid = grid * g;
 end
 
 function [x, y, bool] = interpolate(x1, y1, z1, x2, y2, z2, z0)
-% interpolate  Determine linear interpolation point between two nodes. 
+% INTERPOLATE  Determine linear interpolation point between two nodes. 
   dz1 = z0-z1; 
   dz2 = z0-z2;
   if (dz1 == 0.0) 
     x = x1; 
     y = y1; 
-    bool = 1;
+    bool = true;
   elseif (dz2 == 0.0) 
     x = x2; 
     y = y2; 
-    bool = 0;
+    bool = false;
   elseif (((dz1 > 0.0) && (dz2 > 0.0)) || ((dz1 < 0.0) && (dz2 < 0.0))) 
     x = 0.0; 
     y = 0.0; 
-    bool = 0; % FALSE
+    bool = false; 
   else
     dz = z2-z1;
     t = dz1/dz;
     x = x1 + (x2-x1) * t; 
     y = y1 + (y2-y1) * t;
-    bool = 1; % TRUE
+    bool = true; 
   end
 end
 
 function [lines] = contourGrid(lines, x1, y1, x2, y2, grid, level)
-% contourGrid   Output one contour level by linear interpolation among grid nodes.
+% CONTOURGRID  Output one contour level by linear interpolation among grid nodes.
   [ng,mg] = size(grid);
   dnx = (x2-x1)/(ng-1.0); 
   dny = (y2-y1)/(mg-1.0);
@@ -529,12 +511,12 @@ function [lines] = contourGrid(lines, x1, y1, x2, y2, grid, level)
 end
 
 function [lines] = lineOut(lines, x1, y1, x2, y2) 
-% lineOut  Output a line segment 
+% LINEOUT  Output a line segment 
   lines = [lines; [x1,y1,x2,y2]];
 end
 
 function [lines] = cLineOut(lines, x1, y1, x2, y2) 
-% cLineOut  Output a line segment clipped to current projection. 
+% VLINEOUT  Output a line segment clipped to current projection. 
   [cx1, cy1, cx2, cy2, visible] = clipLineCircle(0.0, 0.0, 1.0, x1, y1, x2, y2); 
   if (visible)
     lines = [lines; [cx1,cy1,cx2,cy2]];
@@ -544,7 +526,7 @@ function [lines] = cLineOut(lines, x1, y1, x2, y2)
 end
 
 function [grid, lines] = contour(dc, ngrid, sigma, nlevels, cint, cmin, cmax, opts) 
-% contour  Grids data and outputs contours. 
+% CONTOUR  Grids data and outputs contours. 
   grid = gridKamb(dc, ngrid, sigma, opts);  
   zmin = 0.0;
   zmax = max(max(grid));
@@ -553,7 +535,7 @@ function [grid, lines] = contour(dc, ngrid, sigma, nlevels, cint, cmin, cmax, op
   x2 = 1.0; 
   y2 = 1.0;
   lines = zeros(0,4);
-  if (opts.space == 1) % set interval
+  if (opts.cinterval == true) % set interval
     level = cmin;
     while (level < cmax+1e-9)
       lines = contourGrid(lines, x1, y1, x2, y2, grid, level);
@@ -570,7 +552,7 @@ function [grid, lines] = contour(dc, ngrid, sigma, nlevels, cint, cmin, cmax, op
 end
 
 function [lines] = drawCircle(lines, x, y, radius, n)
-% drawCircle  Output a circle, adopted from Rodgers and Adams, 1976, p. 216. 
+% DRAWCIRCLE  Output a circle, adopted from Rodgers and Adams, 1976, p. 216. 
   ainc = 2.0 * pi/n;
   c1 = cos(ainc); 
   s1 = sin(ainc);
@@ -586,7 +568,7 @@ function [lines] = drawCircle(lines, x, y, radius, n)
 end
 
 function [frame] = drawFrame(frameopt)
-% drawFrame  Output projection frame. 
+% DRAWFRAME  Output projection frame. 
   frame = zeros(0,4);
   if (frameopt == 0)
     ts = 0.05;
@@ -626,24 +608,29 @@ function [opts] = getOptions(options)
   else
     opts.phifmt = 0;
   end  
-  if hasOption(options, 'deg') % degrees
-    opts.angfmt = 1;
+  if hasOption(options, 'rad') % radians
+    opts.angfmt = 0;
   elseif hasOption(options, 'grd') % gradians
     opts.angfmt = 2;
-  else % radians
-    opts.angfmt = 0;
+  else % degrees
+    opts.angfmt = 1;
   end  
+  if hasOption(options, 'mud')
+    opts.mud = true;
+  else
+    opts.mud = false;
+  end
   if hasOption(options, 'sch') % schmidt
     opts.method = 1;
-  elseif hasOption(options, 'ncn') % none
+  elseif hasOption(options, 'ncon') % none
     opts.method = 2;
   else % kamb
     opts.method = 0;
   end
   if hasOption(options, 'vec') % vectors
-    opts.direct = 1;
+    opts.directed = true;
   else % axes 
-    opts.direct = 0;
+    opts.directed = false;
   end
   if hasOption(options, 'sma') % inverse area  
     opts.smooth = 1;
@@ -654,20 +641,20 @@ function [opts] = getOptions(options)
   else % exponential  
     opts.smooth = 0;
   end
-  if hasOption(options, 'up')
+  if hasOption(options, 'upper')
     opts.hemi = 1;
   else
     opts.hemi = 0;
   end
-  if hasOption(options, 'ste')
+  if hasOption(options, 'stereo')
     opts.proj = 1;
   else
     opts.proj = 0;
   end
-  if hasOption(options, 'int')
-    opts.space = 1;
+  if hasOption(options, 'cint')
+    opts.cinterval = true;
   else
-    opts.space = 0;
+    opts.cinterval = false;
   end
   if hasOption(options, 'ntc')
     opts.frame = 1;
