@@ -12,10 +12,9 @@ which should be cited by publications using this code, algorithm, or derivative
 works, to produce figures or other content. 
 
 ## License
-Please see the LICENSE and CITATION files for license restrictions and citation 
-information.
+Please see the (LICENSE)[LICENSE.md] and (CITATION)[CITATION.md] files for license and citation information.
 
 ## Related Software
-The program __Orient__ by this author is free software that includes this functionality, and numerous additional options. It runs on Macintosh, Windows, and Linux platforms, and can be downloaded for free from: 
+The program (__Orient__)[https://www.frederickvollmer.com/orient] by this author is free software that includes this functionality, and numerous additional options. It runs on Macintosh, Windows, and Linux platforms.
 
-https://www.frederickvollmer.com/orient/
+
