@@ -71,7 +71,7 @@ for i = 1:n
   ly = [lines(i,2), lines(i,4)]; 
   %h = plot(lx, ly, 'k');
   %set(h, 'LineWidth', 2);
-  line ('XData', lx, 'YData', ly, 'Color', 'k', 'LineWidth', 2);
+  line ('XData', lx, 'YData', ly, 'Color', 'k', 'LineWidth', 1);
 end
 
 % plot frame, returned as array of (x1, y1, x2, y2), first four are ticks
