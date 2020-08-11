@@ -1,4 +1,4 @@
-# MIT License
+MIT License
 
 Copyright (c) 1992-2020 Frederick W. Vollmer
 
