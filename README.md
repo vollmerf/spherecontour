@@ -15,13 +15,13 @@ v. 21, n. 1, p. 31-49.__
 which should be cited by publications using this code, algorithm, or derivative 
 works, to produce figures or other content. 
 
-The C and Pascal code is complete but has not been updated for current systems as it is superseded by [Orient](https://vollmerf.github.io/orient). The MATLAB script should run on current MATLAB and Octave software.
-
 ## License
 See [LICENSE](LICENSE.md) and [CITATION](CITATION.md) for license and citation information.
 
-## Download
+## Notes
+The C and Pascal code is complete but has not been updated for current systems as it is superseded by [Orient](https://vollmerf.github.io/orient). The MATLAB script should run on current MATLAB and Octave software.
 
+## Download
 [SphereContour](https://github.com/vollmerf/spherecontour)
 
 ## Related Software
