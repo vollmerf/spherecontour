@@ -12,8 +12,7 @@ which should be cited by publications using this code, algorithm, or derivative
 works, to produce figures or other content. 
 
 ## License
-Please see the LICENSE and CITATION files for license restrictions and citation 
-information.
+See [LICENSE](LICENSE.md) and [CITATION](CITATION.md) for license and citation information.
 
 ## Notes
 This is a command line program created using Borland Turbo Pascal and BGI graphics. The algorithms are identical to the C version. It has not been updated to compile in current Delphi or Free Pascal compilers, and has been superseded by [__Orient__](https://vollmerf.github.io/orient/).

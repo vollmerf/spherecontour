@@ -12,7 +12,7 @@ which should be cited by publications using this code, algorithm, or derivative
 works, to produce figures or other content. 
 
 ## License
-Please see [LICENSE](./LICENSE.md) and [CITATION](CITATION.md) for license and citation information.
+See [LICENSE](LICENSE.md) and [CITATION](CITATION.md) for license and citation information.
 
 ## Notes
 This is the C code published in Vollmer (1995). It is a command line program (SPHERECON) created using Borland Turbo C++ and BGI graphics. It has not been updated to run on current C++ compilers, such as GNU GCC, and has been superseded by [__Orient__](https://vollmerf.github.io/orient/).

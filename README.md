@@ -6,7 +6,7 @@ Code for plotting and automatic contouring of spherical orientation data, includ
 ---
 
 ## Citation
-This repostory contains C, Pascal, and MATLAB implementations of the algorithms presented in:
+This repostory contains MATLAB, C, and Pascal implementations of the algorithms presented in:
 
 __Vollmer, F.W., 1995. C program for automatic contouring of spherical 
 orientation data using a modified Kamb method: Computers & Geosciences, 
