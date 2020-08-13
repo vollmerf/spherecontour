@@ -22,7 +22,7 @@ See [LICENSE](LICENSE.md) and [CITATION](CITATION.md) for license and citation i
 The C and Pascal code is complete but has not been updated for current systems as it is superseded by [Orient](https://vollmerf.github.io/orient). The MATLAB script should run on current MATLAB and Octave software.
 
 ## Download
-[SphereContour](https://github.com/vollmerf/spherecontour)
+[SphereContour](https://github.com/vollmerf/spherecontour/releases/tag/v2.1.0)
 
 ## Related Software
 The program [Orient](https://vollmerf.github.io/orient) by this author is free software that includes this functionality, and numerous additional options. It runs on Macintosh, Windows, and Linux platforms. 
