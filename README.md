@@ -19,7 +19,7 @@ works, to produce figures or other content.
 See [LICENSE](LICENSE.md) and [CITATION](CITATION.md) for license and citation information.
 
 ## Notes
-The C and Pascal code is complete but has not been updated for current systems as it is superseded by [Orient](https://vollmerf.github.io/orient). The MATLAB script should run on current MATLAB and Octave software.
+The C and Pascal code is complete but has not been updated for current systems as it is superseded by [Orient](https://vollmerf.github.io/orient). The MATLAB script should run on current MATLAB and Octave releases.
 
 ## Download
 [SphereContour](https://github.com/vollmerf/spherecontour/releases/tag/v2.1.0)
