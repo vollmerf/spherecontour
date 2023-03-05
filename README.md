@@ -19,7 +19,9 @@ works, to produce figures or other content.
 See [LICENSE](LICENSE.md) and [CITATION](CITATION.md) for license and citation information.
 
 ## Notes
-The C and Pascal code is complete but has not been updated for current systems as it is superseded by [Orient](https://vollmerf.github.io/orient). The MATLAB script should run on current MATLAB and Octave releases.
+The C and Pascal code is complete but has not been updated for current systems. Please see [ERRATA](ERRATA.md) for known errors. These have been superseded by [Orient](https://vollmerf.github.io/orient). 
+
+The MATLAB script should run on current MATLAB and Octave releases. 
 
 ## Download
 [SphereContour](https://github.com/vollmerf/spherecontour/releases/tag/v2.1.0)
@@ -31,4 +33,4 @@ The program [Orient](https://vollmerf.github.io/orient) by this author is free s
 
 [Home](https://vollmerf.github.io/) | [Software](https://vollmerf.github.io/software/) | [Orient](https://vollmerf.github.io/orient/) | [EllipseFit](https://vollmerf.github.io/ellipsefit/) | [Antevs](https://vollmerf.github.io/antevs/)
 
-| 6 Aug 2020 |
+| 5 Mar 2023 |
